@@ -35,12 +35,64 @@
             <h1 class="cover-heading">General Elections 2014</h1>
             <p class="lead">Search documents related to the General Elections of 2014, and get to know more about everything that matters.</p>
             <p class="lead">
-				<form class="form-signin" role="form">
-				<input class="form-control" placeholder="Query" required autofocus></br>
-                <button class="btn btn-lg btn-primary" type="submit">Search</button>
+				<form class="form-signin" role="form" action="search.php" >
+				<input class="form-control" placeholder="Query" id="searchid" required autofocus></br>
+				<div id="result"></div>
+               <button class="btn btn-lg btn-primary" type="submit">Search</button>
 				</form>
             </p>
           </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+$(".form-control").keyup(function() 
+{ 
+var searchid = $(this).val();
+var dataString = 'search='+searchid;
+if(searchid=='')
+{
+jQuery("#result").fadeOut();
+}
+else if(searchid.indexOf(" ")!=-1){
+	var dataString = 'search='+searchid.substring(searchid.lastIndexOf(" ")+1,searchid.length);
+}
+else{
+	var dataSrting = 'search='+searchid;
+}
+if(searchid!='')
+{
+    
+	$.ajax({
+    type: "POST",
+    url: "search.php",
+    data: dataString,
+    cache: false,
+    success: function(html)
+    {
+    $("#result").html(html).show();
+    }
+    });
+}return false;    
+});
+
+jQuery("#result").live("click",function(e){ 
+    var $clicked = $(e.target);
+    var $name = $clicked.find('.name').html();
+    var decoded = $("<div/>").html($name).text();
+    $('#searchid').val(decoded);
+});
+jQuery(document).live("click", function(e) { 
+    var $clicked = $(e.target);
+    if (! $clicked.hasClass("search")){
+    jQuery("#result").fadeOut(); 
+    }
+});
+$('#searchid').click(function(){
+    jQuery("#result").fadeIn();
+});
+});
+</script>
 
           <div class="mastfoot">
             <div class="inner">
