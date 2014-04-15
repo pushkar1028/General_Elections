@@ -35,8 +35,8 @@
             <h1 class="cover-heading">General Elections 2014</h1>
             <p class="lead">Search documents related to the General Elections of 2014, and get to know more about everything that matters.</p>
             <p class="lead">
-				<form class="form-signin" role="form" action="search.php" >
-				<input class="form-control" placeholder="Query" id="searchid" required autofocus></br>
+				<form class="form-signin" role="form" action="search.php" method="get">
+				<input class="form-control" placeholder="Query" id="searchid" name="searchid" required autofocus></br>
 				<div id="result"></div>
                <button class="btn btn-lg btn-primary" type="submit">Search</button>
 				</form>
@@ -49,16 +49,16 @@ $(function(){
 $(".form-control").keyup(function() 
 { 
 var searchid = $(this).val();
-var dataString = 'search='+searchid;
+var dataString = searchid;
 if(searchid=='')
 {
 jQuery("#result").fadeOut();
 }
 else if(searchid.indexOf(" ")!=-1){
-	var dataString = 'search='+searchid.substring(searchid.lastIndexOf(" ")+1,searchid.length);
+	var dataString = searchid.substring(searchid.lastIndexOf(" ")+1,searchid.length);
 }
 else{
-	var dataSrting = 'search='+searchid;
+	var dataSrting = searchid;
 }
 if(searchid!='')
 {
@@ -66,7 +66,7 @@ if(searchid!='')
 	$.ajax({
     type: "POST",
     url: "search.php",
-    data: dataString,
+    data: {search:dataString},
     cache: false,
     success: function(html)
     {
